@@ -3,14 +3,19 @@ const cors = require('cors')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+require('dotenv').config()
 
 const app = express()
 
-//Middleware
+// Middleware
 app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
+
+// Routers
+app.use('/api/users', require('./routes/userRoutes'))
+
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {
