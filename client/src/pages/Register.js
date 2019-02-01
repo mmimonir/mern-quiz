@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert } from "reactstrap";
 import TextInput from "../components/forms/TextInput";
 import { register } from "../store/actions/authActions";
@@ -89,6 +89,7 @@ class Register extends React.Component {
                 />
                 <Button color="primary"> Register </Button>
               </fieldset>
+              <Link to='/login'>Already Have account? Login Now</Link>
             </Form>
             {Object.keys(error).length > 0 && (
               <Alert color="danger">
