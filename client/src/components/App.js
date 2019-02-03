@@ -7,12 +7,14 @@ import Login from '../pages/Login'
 import Register from '../pages/Register'
 import RegistrationSuccessfull from '../pages/RegistrationSuccessfull'
 import ActivationPage from '../pages/ActivationPage';
+import TopNavbar from './navbar/TopNavbar'
 
 class App extends Component {
   render() {
     return( 
     <BrowserRouter>
       <Container>
+        <TopNavbar />
             <Switch>
               <Route exact path='/' component={Home} />
               <Route path='/login' component={Login} />

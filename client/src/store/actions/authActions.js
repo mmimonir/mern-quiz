@@ -55,9 +55,16 @@ export const login = (user, history) => dispatch => {
     });
 };
 
+export const logout = history => dispatch => {
+  localStorage.removeItem('auth_token')
+  setAuthToken()
+  dispatch(setUser())
+  history.push('/login')
+}
+
 export const setUser = user => {
   return {
     type: ActionTypes.SET_USER,
-    payload: { user }
+    payload: { user: user ? user : {} }
   };
 };
