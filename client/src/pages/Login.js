@@ -64,7 +64,8 @@ class Login extends React.Component {
                                 />                                
                                 <Button color="primary"> Login </Button>
                             </fieldset>
-                            <Link to='/register'> Don't Have Account? Register Now</Link>
+                            <Link to='/register'> Don't Have Account? Register Now</Link> <span> or </span>
+                            <Link to='/'> forgot password </Link>
                         </Form>
                         {Object.keys(error).length > 0 && (
                             <Alert color="danger">
