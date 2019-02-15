@@ -1,14 +1,14 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const registrationValidator = require("../validators/registrationValidator");
-const loginValidator = require("../validators/loginValidator");
-const { catchError } = require("../utils/error");
-const { PENDING, ACTIVE } = require("../utils/accountStatus");
-const verificationTemplate = require("../emailTemplates/verificationTemplate");
-const welcomeTemplate = require("../emailTemplates/welcomeTemplate");
-const generateEmailOption = require("../utils/generateEmailOption");
-const transporter = require("../nodemailer");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const registrationValidator = require('../validators/registrationValidator');
+const loginValidator = require('../validators/loginValidator');
+const { catchError } = require('../utils/error');
+const { PENDING, ACTIVE } = require('../utils/accountStatus');
+const verificationTemplate = require('../emailTemplates/verificationTemplate');
+const welcomeTemplate = require('../emailTemplates/welcomeTemplate');
+const generateEmailOption = require('../utils/generateEmailOption');
+const transporter = require('../nodemailer');
 
 module.exports = {
   async register(req, res) {
@@ -27,12 +27,12 @@ module.exports = {
         const findUser = await User.findOne({ email });
         if (findUser) {
           return res.status(400).json({
-            message: "Email Already Exist"
+            message: 'Email Already Exist'
           });
         }
         // Create A Token
         const activateToken = jwt.sign({ name, email }, process.env.SECRET, {
-          expiresIn: "1d"
+          expiresIn: '1d'
         });
 
         // bcrypt.genSalt(10, function(err, salt) {})
@@ -59,7 +59,7 @@ module.exports = {
           });
           let mailOption = generateEmailOption({
             to: newUser.email,
-            subject: "Activate your account",
+            subject: 'Activate your account',
             template
           });
 
@@ -67,7 +67,7 @@ module.exports = {
             if (err) return catchError(res, err);
 
             res.status(201).json({
-              message: "User Created Successfully, Check your Email to Verify",
+              message: 'User Created Successfully, Check your Email to Verify',
               user: {
                 _id: newUser._id,
                 name: newUser.name,
@@ -84,21 +84,21 @@ module.exports = {
 
   async activateAccount(req, res) {
     const token = req.params.token;
-    let decode = {}
+    let decode = {};
     try {
       decode = jwt.verify(token, process.env.SECRET);
     } catch (error) {
-      return catchError(res, new Error("Invalid Token"));
+      return catchError(res, new Error('Invalid Token'));
     }
 
     try {
       const user = await User.findOne({ email: decode.email });
       if (!user) {
-        return catchError(res, new Error("Invalid Token"));
+        return catchError(res, new Error('Invalid Token'));
       }
 
       if (user.isActivated) {
-        let error = "Already Activated";
+        let error = 'Already Activated';
         return catchError(res, error);
       }
 
@@ -109,18 +109,18 @@ module.exports = {
             $set: {
               accountStatus: ACTIVE,
               isActivated: true,
-              activateToken: ""
+              activateToken: ''
             }
           }
         );
         //start Send welcome mail
         let template = welcomeTemplate({
           name: updatedUser.name,
-          link: "http://localhost:4000"
+          link: 'http://localhost:4000'
         });
         let mailOption = generateEmailOption({
           to: updatedUser.email,
-          subject: "Welcome to Twinkle Cats",
+          subject: 'Welcome to Twinkle Cats',
           template
         });
         transporter.sendMail(mailOption, (err, info) => {
@@ -128,7 +128,7 @@ module.exports = {
           console.log(JSON.stringify(info, 2));
 
           res.status(200).json({
-            message: "Account Activated",
+            message: 'Account Activated',
             user: {
               _id: updatedUser._id,
               email: updatedUser.email
@@ -138,7 +138,7 @@ module.exports = {
         //end send welcome mail
       } else {
         res.status(400).json({
-          message: "Token Invalid"
+          message: 'Token Invalid'
         });
       }
     } catch (error) {
@@ -158,12 +158,12 @@ module.exports = {
 
     if (!user) {
       return res.status(400).json({
-        message: "User Not Found"
+        message: 'User Not Found'
       });
     }
     bcrypt.compare(password, user.password, (err, match) => {
       if (err) return catchError(match, err);
-      if (!match) return res.status(400).json({ message: "Invalid Password" });
+      if (!match) return res.status(400).json({ message: 'Invalid Password' });
 
       let token = jwt.sign(
         {
@@ -171,11 +171,12 @@ module.exports = {
           email: user.email,
           name: user.name
         },
-        process.env.SECRET, {expiresIn: '2h'}
+        process.env.SECRET,
+        { expiresIn: '2h' }
       );
 
       return res.status(200).json({
-        message: "Login Successfull",
+        message: 'Login Successfull',
         token: `Bearer ${token}`
       });
     });
@@ -191,7 +192,7 @@ module.exports = {
     try {
       await User.findByIdAndRemove(id);
       res.status(200).json({
-        message: "User Removed Successfully"
+        message: 'User Removed Successfully'
       });
     } catch (err) {
       return catchError(res, err);

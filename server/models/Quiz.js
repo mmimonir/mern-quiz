@@ -1,48 +1,60 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const common = {
-    type: String,
-    required: true,
-    trim: true
-}
-const QuizSchema = new Schema({
+  type: String,
+  required: true,
+  trim: true
+};
+const QuizSchema = new Schema(
+  {
     title: {
-        ...common
+      ...common
     },
     description: {
-        ...common
+      ...common
     },
     tags: [String],
-    category: String,
-    skill: String,
-    author: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true
     },
-    question: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Question',
-            required: true
-        }
+    skill: {
+      type: Schema.Types.ObjectId,
+      ref: 'Skill',
+      required: true
+    },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    questions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Question',
+        required: true
+      }
     ],
     duration: Date,
     reviews: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Review'
-        }
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Review'
+      }
     ],
     participants: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Participant'
-        }
-    ]
-}, {timestamps: true})
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Participant'
+      }
+    ],
+    published: Boolean
+  },
+  { timestamps: true }
+);
 
-const Quiz = mongoose.model('Quiz', QuizSchema)
+const Quiz = mongoose.model('Quiz', QuizSchema);
 
-module.exports = Quiz
+module.exports = Quiz;

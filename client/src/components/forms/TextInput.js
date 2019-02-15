@@ -1,6 +1,6 @@
-import React from "react";
-import { FormGroup, Label, Input, FormFeedback } from "reactstrap";
-import propTypes from "prop-types";
+import React from 'react';
+import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import propTypes from 'prop-types';
 
 const TextInput = ({
   name,
@@ -14,8 +14,8 @@ const TextInput = ({
   focusHandler
 }) => {
   return (
-    <FormGroup className="my-3">
-      <Label for={name}>{label}</Label>
+    <FormGroup className='my-1'>
+      {label && <Label for={name}>{label}</Label>}
       <Input
         type={type}
         name={name}
@@ -35,7 +35,7 @@ const TextInput = ({
 TextInput.propTypes = {
   name: propTypes.string.isRequired,
   type: propTypes.string.isRequired,
-  label: propTypes.string.isRequired,
+  label: propTypes.string,
   placeholder: propTypes.string.isRequired,
   value: propTypes.string,
   error: propTypes.string,
@@ -45,8 +45,8 @@ TextInput.propTypes = {
 };
 
 TextInput.defaultProps = {
-  type: "text",
-  value: ""
+  type: 'text',
+  value: ''
 };
 
 export default TextInput;
